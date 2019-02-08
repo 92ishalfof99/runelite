@@ -44,6 +44,7 @@ import net.runelite.api.events.MenuOpened;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.PostItemComposition;
 import net.runelite.api.events.WidgetMenuOptionClicked;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -408,7 +409,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			if (config.swapPay())
 			{
 				swap("pay", option, target, true);
-				swap("pay (", option, target, false);
 			}
 
 			if (config.swapDecant())
@@ -497,10 +497,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			swap("quick-pass", option, target, true);
 			swap("quick pass", option, target, true);
 		}
-		else if (config.swapQuick() && option.equals("open"))
-		{
-			swap("quick-open", option, target, true);
-		}
 		else if (config.swapAdmire() && option.equals("admire"))
 		{
 			swap("teleport", option, target, true);
@@ -510,10 +506,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 		else if (config.swapPrivate() && option.equals("shared"))
 		{
 			swap("private", option, target, true);
-		}
-		else if (config.swapPick() && option.equals("pick"))
-		{
-			swap("pick-lots", option, target, true);
 		}
 		else if (config.shiftClickCustomization() && shiftModifier && !option.equals("use"))
 		{
@@ -541,6 +533,45 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("use", option, target, true);
 		}
+		else if (config.swapBlackjack() && option.equals("attack"))
+		{
+			if (isKnockedOut)
+			{
+				swap("pickpocket", option, target, true);
+			}
+			else
+			{
+				swap("knock-out", option, target, true);
+			}
+		}
+	}
+
+	private boolean isKnockedOut = false;
+	private int knockedOutCounter = 0;
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		if (!isKnockedOut && client.getLocalPlayer().getAnimation() == 401)
+		{
+			isKnockedOut = true;
+		}
+
+		if (isKnockedOut)
+		{
+			knockedOutCounter += 1;
+		}
+
+		System.out.println(client.getLocalPlayer().getAnimation());
+		if (knockedOutCounter > 4 || client.getLocalPlayer().getAnimation() == 403) {
+			resetKnockedOut();
+		}
+	}
+
+	private void resetKnockedOut()
+	{
+		knockedOutCounter = 0;
+		isKnockedOut = false;
 	}
 
 	@Subscribe
