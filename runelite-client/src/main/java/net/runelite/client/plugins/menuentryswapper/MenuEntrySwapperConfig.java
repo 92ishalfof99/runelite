@@ -270,9 +270,9 @@ public interface MenuEntrySwapperConfig extends Config
 	default boolean swapBlackjack() { return true; }
 	
 	@ConfigItem(
-			keyName = "swapWalkhere",
-			name = "RoguesDen",
-			description = "Swap Walk Here with Search for Rogues Den."
+		keyName = "swapWalkhere",
+		name = "RoguesDen",
+		description = "Swap Walk Here with Search for Rogues Den."
 	)
 	default boolean swapWalkhere() { return true; }
 }
