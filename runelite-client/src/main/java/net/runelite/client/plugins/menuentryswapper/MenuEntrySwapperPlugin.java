@@ -348,19 +348,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 			return;
 		}
 
-		if (option.equals("walk-here"))
-		{
-			if (config.swapWalkhere() && target.contains("search floor"))
-			{
-				swap("search floor", option, target, true);
-			}
-
-			if (config.swapWalkhere() && target.contains("search wall"))
-			{
-				swap("search wall", option, target, true);
-			}
-		}
-
 		if (option.equals("talk-to"))
 		{
 			if (config.swapPickpocket() && target.contains("h.a.m."))
